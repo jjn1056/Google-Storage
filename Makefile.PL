@@ -10,7 +10,7 @@ requires (
     'HTTP::Date' => '5.831',
     'HTTP::Request' => '5.827',
     'HTTP::Headers' => '5.835',
-    'XML::Simple' => '2.18',
+    'XML::Bare' => '0.45',
     'URI' => '1.54',
     'MIME::Base64' => '3.09',
     'Digest::HMAC_SHA1' => '1.01',

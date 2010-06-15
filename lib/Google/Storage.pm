@@ -10,6 +10,7 @@ use HTTP::Date qw(time2str);
 use Digest::HMAC_SHA1 qw(hmac_sha1);
 use MIME::Base64 qw(encode_base64);
 use String::Util qw(crunch);
+use XML::Bare;
 use Method::Signatures::Simple;
 
 our $VERSION = "0.01";
@@ -66,7 +67,20 @@ method buckets {
 
     my $response = $self->ua->request($request);
     if ($response->is_success) {
-        return $response->decoded_content;
+        my $parse_tree = XML::Bare->new(text=>$response->decoded_content);
+        my $parsed_content = $parse_tree->parse;
+        my $buckets = $parsed_content->{ListAllMyBucketsResult}->{Buckets}->{Bucket};
+        my @buckets = map { +{
+            CreationDate => $_->{CreationDate}->{value},
+            Name => $_->{Name}->{value},
+        } } ref $buckets eq 'ARRAY' ? @$buckets : ($buckets);
+
+        return {
+            owner_id => $parsed_content->{ListAllMyBucketsResult}->{Owner}->{ID}->{value},
+            owner_displayname => '',
+            buckets => \@buckets,
+        };
+
     } else {
         return $response->status_line;
     }

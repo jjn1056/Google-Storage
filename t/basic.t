@@ -31,11 +31,11 @@ my $headers = HTTP::Headers->new(
     a => 1,
     b => 2,
     'x-goog-meta-test-a' => "a",
-    'x-goog-meta-TEXT-b' => "b",
+    'x-goog-meta-TEST-b' => "b",
     'x-goOG-meta-test-A' => "aa  ",
     'x-Goog-MEta-test-c' => " c",
-    'x-gOOg-meta-test-d' => "d",
- #i   'x-gOOg-meTa-tESt-e' => "a  bc",
+    'x-gOOg-meta-test-d' => " d ",
+    'x-gOOg-meTa-tESt-e' => "a  bc",
 
 #    'x-gOOg-meTa-tESt-e' => " \na     b  c\nd\n \n   e\n\n ",
 
@@ -74,9 +74,9 @@ my $ua = LWP::UserAgent->new(
 my $response = $ua->request($request);
 
 use Data::Dump 'dump';
-warn dump $response->content;
-warn dump $response;
-warn dump @extension_headers;
+warn  $response->content;
+## warn dump $response;
+warn dump @headers,@extension_headers;
 
 
 warn dump $gs->buckets;
