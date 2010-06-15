@@ -22,6 +22,7 @@ build_requires (
 );
 
 all_from 'lib/Google/Storage.pm';
+repository 'git://github.com/jjn1056/Google-Storage.git';
 auto_install;
 WriteAll;
 
