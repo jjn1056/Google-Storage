@@ -22,7 +22,7 @@ ok my $gs = Google::Storage->new(%opts),
 use URI;
 use HTTP::Date;
 use HTTP::Headers;
-use String::Util qw(crunch);
+use String::Util qw(trim);
 
 our $gsurl = URI->new('http://commondatastorage.googleapis.com/');
 
@@ -36,8 +36,9 @@ my $headers = HTTP::Headers->new(
     'x-Goog-MEta-test-c' => " c",
     'x-gOOg-meta-test-d' => " d ",
     'x-gOOg-meTa-tESt-e' => "a  bc",
-
-#    'x-gOOg-meTa-tESt-e' => " \na     b  c\nd\n \n   e\n\n ",
+#    'x-gOOg-meTa-tESt-f' => "ab\nc",
+    
+#    'x-gOOg-meTa-tESt-f' => " \na     b  c\nd\n \r\n   \ta\te\n\n\r ",
 
 );
 
@@ -50,7 +51,7 @@ my @headers = (
 );
 
 my @extension_headers = (
-    map {$_ .':'. join(',', map {crunch($_)} $request->headers->header($_))}
+    map {$_ .':'. join(',', map {trim($_)} $request->headers->header($_))}
     grep {$_=~m/^x-goog/}
     sort {$a cmp $b}
     map {lc $_}

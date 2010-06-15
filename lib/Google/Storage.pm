@@ -9,7 +9,7 @@ use HTTP::Request;
 use HTTP::Date qw(time2str);
 use Digest::HMAC_SHA1 qw(hmac_sha1);
 use MIME::Base64 qw(encode_base64);
-use String::Util qw(crunch);
+use String::Util qw(crunch trim);
 use XML::Bare;
 use Method::Signatures::Simple;
 
@@ -45,7 +45,7 @@ method buckets {
     my $normalize_header = sub {
         my $key = shift @_;
         my @headers = $request->headers->header($key);
-        my @folded_headers = map { crunch($_) } @headers;
+        my @folded_headers = map { trim($_) } @headers;
         my $flattend_headers = join ',', @folded_headers;
         return "$key:$flattend_headers";
     };

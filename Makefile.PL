@@ -6,6 +6,8 @@ use inc::Module::Install;
 
 requires (
     'Moose' => '1.07',
+    'MooseX::Types::DateTime' => '0.05',
+    'MooseX::Types' => '0.22',
     'LWP::UserAgent' => '5.835',
     'HTTP::Date' => '5.831',
     'HTTP::Request' => '5.827',
