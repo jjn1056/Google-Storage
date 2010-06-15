@@ -1,0 +1,9 @@
+log/*
+blib/*
+Makefile
+Makefile.old
+META.yml
+*.swp
+.DS_Store
+/share/var/*
+
