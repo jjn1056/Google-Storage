@@ -5,6 +5,7 @@ use warnings;
 use inc::Module::Install;
 
 requires (
+    'aliased' => '0.30',
     'Moose' => '1.07',
     'MooseX::Types::DateTime' => '0.05',
     'MooseX::Types' => '0.22',

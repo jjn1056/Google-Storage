@@ -12,6 +12,7 @@ use MIME::Base64 qw(encode_base64);
 use String::Util qw(crunch trim);
 use XML::Bare;
 use Method::Signatures::Simple;
+use Google::Storage::Bucket;
 
 our $VERSION = "0.01";
 
@@ -70,10 +71,10 @@ method buckets {
         my $parse_tree = XML::Bare->new(text=>$response->decoded_content);
         my $parsed_content = $parse_tree->parse;
         my $buckets = $parsed_content->{ListAllMyBucketsResult}->{Buckets}->{Bucket};
-        my @buckets = map { +{
-            CreationDate => $_->{CreationDate}->{value},
-            Name => $_->{Name}->{value},
-        } } ref $buckets eq 'ARRAY' ? @$buckets : ($buckets);
+        my @buckets = map { Google::Storage::Bucket->new(
+            creation_date => $_->{CreationDate}->{value},
+            name => $_->{Name}->{value},
+        ) } ref $buckets eq 'ARRAY' ? @$buckets : ($buckets);
 
         return {
             owner_id => $parsed_content->{ListAllMyBucketsResult}->{Owner}->{ID}->{value},

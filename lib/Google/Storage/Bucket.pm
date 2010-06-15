@@ -5,12 +5,8 @@ use Method::Signatures::Simple;
 use MooseX::Types::DateTime qw(DateTime);
 use MooseX::Types::Moose qw(Str);
 
-coerce DateTime,
-from Str,
-via { $_ };
-
-has 'name' => (is=>'ro', isa=>'Str', require=>1);
-has 'creation_date' => (is=>'ro', isa=>DateTime, require=>1, coerce=>1);
+has 'name' => (is=>'ro', isa=>Str, required=>1);
+has 'creation_date' => (is=>'ro', isa=>Str, required=>1);
 
 =head1 NAME
 
