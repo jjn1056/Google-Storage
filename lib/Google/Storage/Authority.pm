@@ -22,7 +22,7 @@ method sign_request($request) {
 
     $request
         ->headers
-        ->authorization("GOOG1 @{[$self->access_key]}:$signature");
+        ->authorization(sprintf("GOOG1 %s:%s", $self->access_key, $signature));
 
     return $request;
 }
