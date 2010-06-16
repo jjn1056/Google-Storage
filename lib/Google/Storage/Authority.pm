@@ -41,8 +41,8 @@ method _extension_headers($request) {
 
 method _normalize_header($request, $header_name) {
     my @headers = $request->headers->header($header_name);
-    my @folded_headers = map { trim($_) } @headers;
-    my $flattend_headers = join ',', @folded_headers;
+    my @whitespace_folded_headers = map { trim($_) } @headers;
+    my $flattend_headers = join ',', @whitespace_folded_headers;
     return "$header_name:$flattend_headers";
 }
 
