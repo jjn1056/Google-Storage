@@ -17,7 +17,7 @@ has 'authority' => (
     handles=>['sign_request'],
 );
 
-method list_all_my_buckets {
+method get {
 
     ## TODO this bit probably needs to be broken out
     use HTTP::Date;
@@ -66,7 +66,7 @@ connect to Google Storage and sign requests.  This is a required attribute.
 
 This class defines the following Methods.
 
-=head2 list_all_my_buckets
+=head2 get
 
 Returns a data structure (TBD) representing information about Bucket ownership,
 and other bucket meta data.

@@ -24,7 +24,7 @@ use_ok 'Google::Storage::Service',
 ok my $service = Google::Storage::Service->new(authority=>$authority), 
   'Created Service object';
 
-ok ref($service->list_all_my_buckets),
+ok ref($service->get),
   'got something from the bucket list';
 
 done_testing;
