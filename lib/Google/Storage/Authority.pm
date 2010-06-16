@@ -9,15 +9,21 @@ use String::Util qw(trim);
 has ['access_key', 'secret'] => (is=>'ro', isa=>'Str', required=>1);
 
 method sign_request($request) {
-    my @canonical_headers = $self->_canonical_headers($request);
-    my @extension_headers = $self->_extension_headers($request);
-    my $resource = $request->uri->path;
 
-    my $canonical_string = join("\n", @canonical_headers, @extension_headers) . "\n$resource";
-    my $signed_string = hmac_sha1($canonical_string, $self->secret);
-    my $b64_string = encode_base64($signed_string, '');
+    my $message_to_be_signed = join("\n",
+        $self->_canonical_headers($request),
+        $self->_extension_headers($request),
+        $self->_canonical_resource($request),
+    );
 
-    $request->header(Authorization => "GOOG1 ".$self->access_key.":$b64_string");
+    my $signature = encode_base64(
+        hmac_sha1($message_to_be_signed, $self->secret),
+    );
+
+    $request
+        ->headers
+        ->authorization("GOOG1 @{[$self->access_key]}:$signature");
+
     return $request;
 }
 
@@ -44,6 +50,11 @@ method _normalize_header($request, $header_name) {
     my @whitespace_folded_headers = map { trim($_) } @headers;
     my $flattend_headers = join ',', @whitespace_folded_headers;
     return "$header_name:$flattend_headers";
+}
+
+method _canonical_resource($request) {
+    ## TODO need to handle the full spece and subdomain case
+    return $request->uri->path;
 }
 
 
