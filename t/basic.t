@@ -73,17 +73,38 @@ my $ua = LWP::UserAgent->new(
 );
 
 my $response = $ua->request($request);
+ok( defined $response, 'defined response');
+ok( defined $response->content, 'defined response content');
+ok( $response->content =~ /^\s*\<\?xml/, 'response content starts with <?xml');
+ok( $response->content =~ /ListAllMyBucketsResult/, 'response content contains ListAllMyBucketsResult');
 
 use Data::Dump 'dump';
-warn  $response->content;
-## warn dump $response;
-warn dump @headers,@extension_headers;
+diag("\$response->content:\n", $response->content);
+## diag("\$response:\n",dump($response));
+diag("\@headers\n", dump(\@headers));
+diag("\@extension_headers:", dump(\@extension_headers));
+diag("\@buckets:\n", dump($gs->buckets));
 
+my $buckets = $gs->buckets;
+ok ( defined $buckets, '$gs->buckets defined' );
+ok ( defined $buckets->{buckets}, '$buckets->{buckets} defined' );
+ok ( ref $buckets->{buckets} eq 'ARRAY', '$buckets->{buckets} is an arrayref');
+ok ( length $buckets->{ownerid}, 'has an ownerid');
 
-warn dump $gs->buckets;
+# next tests are to be ran only if the user has buckets
+if ( !@{ $buckets->{buckets} } ) {
+    done_testing();
+    exit 0;
+}
+
+diag("User has buckets, doing some additional tests...");
+
+my @buckets = @{ $buckets->{buckets} };
+if ( @buckets ) {
+    for my $bucket ( @buckets ) {
+        is ( ref $bucket, 'Google::Storage::Bucket' );
+    }
+}
 
 done_testing;
-
-__END__
-
 
