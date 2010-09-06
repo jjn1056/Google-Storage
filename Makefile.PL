@@ -18,6 +18,8 @@ requires (
     'MIME::Base64' => '3.09',
     'Digest::HMAC_SHA1' => '1.01',
     'String::Util' => '0.11',
+    'Method::Signatures::Simple' => '0.06',
+    'XML::Simple' => '2.18',
 );
 
 build_requires (
